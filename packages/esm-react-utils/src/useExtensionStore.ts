@@ -1,4 +1,4 @@
 import { ExtensionStore, extensionStore } from "@openmrs/esm-extensions";
-import { createUseStore } from "./createUseStore";
+import { useStore } from "./useStore";
 
-export const useExtensionStore = createUseStore<ExtensionStore>(extensionStore);
+export const useExtensionStore = () => useStore<ExtensionStore>(extensionStore);

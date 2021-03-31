@@ -41,6 +41,7 @@ import type {} from "@openmrs/esm-globals";
  * TODO: Investigate further, per this comment: https://github.com/joeldenning/import-map-overrides/issues/48#issuecomment-769477901
  */
 let didInitialCheck = false;
+let timeWaited = 0;
 function checkForImportMapConfigFile() {
   setTimeout(() => {
     if (
@@ -50,7 +51,15 @@ function checkForImportMapConfigFile() {
     ) {
       window.importMapOverrides.getCurrentPageMap().then(loadConfigs);
       didInitialCheck = true;
+    } else if (timeWaited > 2000) {
+      console.error(
+        "Timed out while waiting for app to be ready to load import map " +
+          "config file. Most likely the import map overrides has not loaded. This is a bug. " +
+          "Going ahead with config loading as a fallback."
+      );
+      loadConfigs();
     } else {
+      timeWaited += 200;
       checkForImportMapConfigFile();
     }
   }, 200);
